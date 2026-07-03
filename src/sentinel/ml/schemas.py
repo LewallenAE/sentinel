@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import Literal
 
 # ---------- Third Party Imports ----------
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # ---------- Project Level Imports ----------
 
@@ -43,4 +43,8 @@ class EvalResult(BaseModel):
     failed_cases: int = Field(ge=0)
     mean_reward: float = Field(ge=0.0, le=1.0)
     
-    
+    @model_validator(mode="after")
+    def validate_case_count(self) -> "EvalResult":
+        if self.total_cases != self.passed_cases + self.failed_cases:
+            raise ValueError("total_cases must equal passed_cases + failed_cases")
+        return self 

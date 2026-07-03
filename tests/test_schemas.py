@@ -122,3 +122,14 @@ def test_eval_result_can_be_created() -> None:
     assert eval_result.passed_cases == 17
     assert eval_result.failed_cases == 3
     assert eval_result.mean_reward == 0.43
+    
+def test_eval_result_error_mentions_case_count_invariant() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        EvalResult(
+            run_id = "run-bad",
+            total_cases = 100,
+            passed_cases = 90,
+            failed_cases = 90,
+            mean_reward = 0.5,
+        )
+    assert "total_cases must equal passed_cases + failed_cases" in str(exc_info.value)
