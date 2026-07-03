@@ -32,3 +32,15 @@ class OracleResult(BaseModel):
     reward: float = Field(ge=0.0, le=1.0)
     oracle_type: Literal["exact_match"]
     reason: str
+
+
+class EvalResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    
+    run_id: str
+    total_cases: int = Field(ge=0)
+    passed_cases: int = Field(ge=0)
+    failed_cases: int = Field(ge=0)
+    mean_reward: float = Field(ge=0.0, le=1.0)
+    
+    
