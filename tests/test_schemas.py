@@ -14,7 +14,7 @@ import pytest
 from pydantic import ValidationError
 
 # ---------- Project Level Imports ----------
-from sentinel.ml.schemas import EvalCase, OracleResult, EvalResult
+from sentinel.ml.schemas import EvalCase, OracleResult, EvalResult, ToolSpec
 
 # ---------- Begin File ----------
 
@@ -133,3 +133,16 @@ def test_eval_result_error_mentions_case_count_invariant() -> None:
             mean_reward = 0.5,
         )
     assert "total_cases must equal passed_cases + failed_cases" in str(exc_info.value)
+    
+def test_tool_spec_can_be_created() -> None:
+    tool = ToolSpec(
+        name="calculator",
+        description="Evaluates a simple arithmetic expression.",
+        input_schema={"expression":"str"},
+        timeout_seconds=5,
+    )
+    
+    assert tool.name == "calculator"
+    assert tool.description == "Evaluates a simple arithmetic expression."
+    assert tool.input_schema == {"expression":"str"}
+    assert tool.timeout_seconds == 5

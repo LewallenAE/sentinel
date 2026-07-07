@@ -48,3 +48,12 @@ class EvalResult(BaseModel):
         if self.total_cases != self.passed_cases + self.failed_cases:
             raise ValueError("total_cases must equal passed_cases + failed_cases")
         return self 
+    
+
+class ToolSpec(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    
+    name: str
+    description: str
+    input_schema: dict[str, str]
+    timeout_seconds: int=Field(gt=0, le=30)
