@@ -14,7 +14,7 @@ import pytest
 from pydantic import ValidationError
 
 # ---------- Project Level Imports ----------
-from sentinel.ml.schemas import EvalCase, OracleResult, EvalResult, ToolSpec
+from sentinel.ml.schemas import EvalCase, OracleResult, EvalResult, ToolSpec, ToolCall, Observation
 
 # ---------- Begin File ----------
 
@@ -146,3 +146,34 @@ def test_tool_spec_can_be_created() -> None:
     assert tool.description == "Evaluates a simple arithmetic expression."
     assert tool.input_schema == {"expression":"str"}
     assert tool.timeout_seconds == 5
+    
+
+def test_tool_call_can_be_created() -> None:
+    call = ToolCall(
+        call_id="call-001",
+        tool_name="calculator",
+        arguments = {"expression": "10+5"},
+    )
+    
+    assert call.call_id == "call-001"
+    assert call.tool_name == "calculator"
+    assert call.arguments == {"expression": "10+5"} 
+    
+
+def test_observation_can_be_created() -> None:
+    
+    observation = Observation(
+        call_id = "call-001",
+        tool_name = "calculator",
+        stdout = "15",
+        stderr = "none",
+        exit_code = 0,
+        latency_ms = 10
+    )
+    
+    assert observation.call_id == "call-001"
+    assert observation.tool_name == "calculator"
+    assert observation.stdout == "15"
+    assert observation.stderr == "none"
+    assert observation.exit_code == 0
+    assert observation.latency_ms == 10

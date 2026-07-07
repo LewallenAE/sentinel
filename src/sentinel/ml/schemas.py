@@ -57,3 +57,22 @@ class ToolSpec(BaseModel):
     description: str
     input_schema: dict[str, str]
     timeout_seconds: int=Field(gt=0, le=30)
+    
+
+class ToolCall(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    
+    call_id: str
+    tool_name: str
+    arguments: dict[str, str]
+    
+
+class Observation(BaseModel):
+    
+    call_id: str
+    tool_name: str
+    stdout: str
+    stderr: str
+    exit_code: int
+    latency_ms: int = Field(ge=0)
+    
